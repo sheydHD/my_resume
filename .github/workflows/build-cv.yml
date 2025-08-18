@@ -35,9 +35,13 @@ jobs:
           latexmk_use_xelatex: true
           work_in_root_file_dir: true
 
-      - name: Convert PDF to JPG
+      - name: Convert PDF to separate PNG files
         run: |
-          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/png/output.png
+          # Convert each page to a separate PNG with white background
+          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/png/output-page-%d.png
+
+          # Also create a combined version for reference
+          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/png/output-combined.png
 
       - name: Set up authentication
         run: |
@@ -45,8 +49,9 @@ jobs:
           git config --local user.name "GitHub Action"
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}.git
 
-      - name: Commit and push generated image
+      - name: Commit and push generated images
         run: |
-          git add attachments/png/output.png
-          git commit -m "Auto-update CV image [skip ci]" || exit 0
+          git add attachments/png/output-page-*.png
+          git add attachments/png/output-combined.png
+          git commit -m "Auto-update CV images [skip ci]" || exit 0
           git push
