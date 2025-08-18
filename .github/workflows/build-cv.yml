@@ -1,0 +1,40 @@
+name: Build CV and Convert to Image
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-cv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: template_2/main.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: true
+
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
+      - name: Convert PDF to JPG
+        run: |
+          convert template_2/main.pdf -quality 90 -density 300 -append attachments/png/output.png
+
+      - name: Commit and push generated image
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add attachments/png/output.png
+          git commit -m "Auto-update CV image [skip ci]" || exit 0
+          git push

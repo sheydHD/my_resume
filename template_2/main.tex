@@ -1,4 +1,4 @@
-\documentclass[10pt, letterpaper]{article}
+\documentclass[11pt, letterpaper]{article}
 
 % Packages:
 \usepackage[
@@ -35,7 +35,7 @@
 \usepackage{needspace} % for avoiding page brake right after the section title
 \usepackage{iftex} % check if engine is pdflatex, xetex or luatex
 \usepackage{fontspec} % For Times New Roman
-\linespread{1.1} % Increase line spacing
+\linespread{1.2} % Increase line spacing
 
 % Ensure that generate pdf is machine readable/ATS parsable:
 \ifPDFTeX
@@ -61,14 +61,14 @@
 \makeatother
 \pagestyle{customFooterStyle}
 
-\titleformat{\section}{\normalfont\large\bfseries\raggedright}{}{pt}{\MakeUppercase}[\vspace{0pt}{\color{black}\rule{\textwidth}{0.1pt}}]
+\titleformat{\section}{\normalfont\large\bfseries\centering}{}{0pt}{\MakeUppercase}[\vspace{-0.3cm}{\color{black}\rule{\textwidth}{0.1pt}}]
 
 \titlespacing{\section}{
     % left space:
     0pt
 }{
     % top space:
-    0.5 cm
+    0.4 cm
 }{
     % bottom space:
     .15 cm
