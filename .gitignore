@@ -1,0 +1,22 @@
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.xdv
+
+# PDFs (optional - remove if you want to track them)
+# *.pdf
+
+# VS Code settings
+.vscode/
+
+# Backup files
+*.bkp
+*.backup
+
+# OS generated files
+.DS_Store
+Thumbs.db
