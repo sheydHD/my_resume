@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Setup LaTeX
         uses: xu-cheng/latex-action@v3
@@ -31,10 +31,14 @@ jobs:
         run: |
           convert template_2/main.pdf -quality 90 -density 300 -append attachments/png/output.png
 
-      - name: Commit and push generated image
+      - name: Set up authentication
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Commit and push generated image
+        run: |
           git add attachments/png/output.png
           git commit -m "Auto-update CV image [skip ci]" || exit 0
           git push
