@@ -15,6 +15,19 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
 
+      - name: Cache apt packages
+        uses: actions/cache@v3
+        with:
+          path: /var/cache/apt/archives
+          key: ${{ runner.os }}-apt-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
       - name: Setup LaTeX
         uses: xu-cheng/latex-action@v3
         with:
@@ -22,14 +35,9 @@ jobs:
           latexmk_use_xelatex: true
           work_in_root_file_dir: true
 
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
-
       - name: Convert PDF to JPG
         run: |
-          convert template_2/main.pdf -quality 90 -density 300 -append attachments/png/output.png
+          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/png/output.png
 
       - name: Set up authentication
         run: |
