@@ -26,24 +26,20 @@ def generate_page_description(filename):
     
     # Map filenames to descriptions
     descriptions = {
-        "output-page-0": "Personal Information & Summary",
-        "output-page-1": "Skills & Work Experience", 
-        "output-page-2": "Languages, Education & Interests",
-        "output-page-3": "Publications & Personal Projects",
-        "output-page-4": "Additional Information",
-        "output-page-5": "Extended Details"
+        "output-page-0": "CV Page 1",
+        "output-page-1": "CV Page 2", 
+        "output-page-2": "CV Page 3",
+        "output-page-3": "CV Page 4",
+        "output-page-4": "CV Page 5",
+        "output-page-5": "CV Page 6"
     }
-    
-    # Try to match with known patterns
-    for pattern, desc in descriptions.items():
-        if base_name.startswith(pattern):
-            return desc
     
     # For other files, generate a generic description
     if "page" in base_name:
         page_num = re.search(r'page-(\d+)', base_name)
         if page_num:
-            return f"CV Page {int(page_num.group(1)) + 1}"
+            page_num_int = int(page_num.group(1))
+            return f"CV Page {page_num_int + 1}"
     
     return "CV Content"
 
@@ -54,8 +50,6 @@ def generate_readme_content():
     content = """# Antoni Dudij - CV/Resume
 
 <div align="center">
-
-## 📄 CV Pages
 
 """
     
@@ -69,8 +63,7 @@ def generate_readme_content():
     for png_file in page_files:
         relative_path = png_file.relative_to(Path("."))
         description = generate_page_description(png_file)
-        content += f"![{description}]({relative_path})\n"
-        content += f"*{description}*\n\n"
+        content += f"![{description}]({relative_path})\n\n"
     
     # Close the div
     content += """</div>
@@ -90,7 +83,15 @@ def main():
         f.write(content)
     
     print("✅ README.md generated successfully!")
-    print(f"📊 Found {len(get_output_png_files())} PNG files in attachments/output/")
+    
+    # Count PNG files and show what was found
+    png_files = get_output_png_files()
+    page_files = [f for f in png_files if "output-page" in f.name]
+    page_files.sort(key=lambda x: int(re.search(r'page-(\d+)', x.name).group(1)) if re.search(r'page-(\d+)', x.name) else 0)
+    
+    print(f"📊 Found {len(page_files)} PNG page files in attachments/output/")
+    for i, png_file in enumerate(page_files):
+        print(f"   Page {i+1}: {png_file.name}")
 
 if __name__ == "__main__":
     main()

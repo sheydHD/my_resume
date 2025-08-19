@@ -1,57 +1,48 @@
-name: Build CV and Convert to Image
+name: Build CV
 
 on:
   push:
-    branches: [main, master]
-  workflow_dispatch:
+    branches: [ master ]
+    paths:
+      - 'template_2/**'
+      - 'modules/**'
 
 jobs:
   build-cv:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PERSONAL_TOKEN }}
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Cache apt packages
-        uses: actions/cache@v3
-        with:
-          path: /var/cache/apt/archives
-          key: ${{ runner.os }}-apt-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-apt-
+    - name: Setup TeX Live
+      uses: xu-cheng/latex-action@v3
+      with:
+        root_file: template_2/main.tex
+        latexmk_use_xelatex: true
+        work_in_root_file_dir: false
 
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
+    - name: Convert PDF to PNG
+      run: |
+        # Install ImageMagick
+        sudo apt-get update
+        sudo apt-get install -y imagemagick
+        
+        # Create output directory
+        mkdir -p attachments/output
+        
+        # Convert PDF pages to PNG
+        convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png
+        
+        # Create combined version
+        convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png
+        
+        # List generated files
+        ls -la attachments/output/
 
-      - name: Setup LaTeX
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: template_2/main.tex
-          latexmk_use_xelatex: true
-          work_in_root_file_dir: true
-
-      - name: Convert PDF to separate PNG files
-        run: |
-          # Convert each page to a separate PNG with white background
-          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png
-
-          # Also create a combined version for reference
-          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png
-
-      - name: Set up authentication
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}.git
-
-      - name: Commit and push generated images
-        run: |
-          git add attachments/output/output-page-*.png
-          git add attachments/output/output-combined.png
-          git commit -m "Auto-update CV images [skip ci]" || exit 0
-          git push
+    - name: Commit generated images
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add attachments/output/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "feat: auto-generate CV PNG images [skip ci]" && git push)

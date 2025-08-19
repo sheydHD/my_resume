@@ -113,34 +113,31 @@ compile_latex() {
 # Function to convert PDF to PNG images
 convert_to_png() {
     print_status "Converting PDF to PNG images..."
-    
+
     # Create output directory if it doesn't exist
     create_directory "attachments/output"
-    
-    # Check if PDF exists
-    if [ ! -f "template_2/main.pdf" ]; then
-        print_error "PDF file not found. Please compile LaTeX first."
-        exit 1
+
+    # Check if PDF exists in the correct location
+    if [ ! -f "template_2/out/main.pdf" ]; then
+        print_error "PDF file not found at template_2/out/main.pdf. Please compile LaTeX first."
     fi
-    
+
     # Convert each page to PNG
     print_status "Converting PDF pages to PNG..."
-    if convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png; then
+    if convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png; then
         print_success "PDF to PNG conversion completed"
     else
         print_error "PDF to PNG conversion failed"
-        exit 1
     fi
-    
+
     # Create combined version
     print_status "Creating combined PNG image..."
-    if convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png; then
+    if convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png; then
         print_success "Combined PNG created"
     else
         print_error "Combined PNG creation failed"
-        exit 1
     fi
-    
+
     # Count generated PNG files
     png_count=$(ls -1 attachments/output/output-page-*.png 2>/dev/null | wc -l)
     print_success "Generated $png_count PNG page files"
@@ -168,15 +165,15 @@ generate_readme() {
 show_summary() {
     print_status "Compilation Summary:"
     echo "----------------------------------------"
-    
+
     # Check PDF
-    if [ -f "template_2/main.pdf" ]; then
-        pdf_size=$(du -h template_2/main.pdf | cut -f1)
-        print_success "PDF: template_2/main.pdf ($pdf_size)"
+    if [ -f "template_2/out/main.pdf" ]; then
+        pdf_size=$(du -h template_2/out/main.pdf | cut -f1)
+        print_success "PDF: template_2/out/main.pdf ($pdf_size)"
     else
-        print_error "PDF: Not found"
+        print_error "PDF: Not found at template_2/out/main.pdf"
     fi
-    
+
     # Check PNG files
     if directory_exists "attachments/output"; then
         png_files=$(ls -1 attachments/output/output-page-*.png 2>/dev/null | wc -l)
@@ -188,7 +185,7 @@ show_summary() {
     else
         print_warning "PNG files: Directory not found"
     fi
-    
+
     # Check README
     if [ -f "README.md" ]; then
         readme_size=$(du -h README.md | cut -f1)
@@ -196,7 +193,7 @@ show_summary() {
     else
         print_error "README: Not found"
     fi
-    
+
     echo "----------------------------------------"
 }
 
