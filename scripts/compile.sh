@@ -124,19 +124,13 @@ convert_to_png() {
 
     # Convert each page to PNG
     print_status "Converting PDF pages to PNG..."
-    if convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png; then
+    if convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 100 -density 1800 attachments/output/output-page-%d.png; then
         print_success "PDF to PNG conversion completed"
     else
         print_error "PDF to PNG conversion failed"
     fi
 
-    # Create combined version
-    print_status "Creating combined PNG image..."
-    if convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png; then
-        print_success "Combined PNG created"
-    else
-        print_error "Combined PNG creation failed"
-    fi
+
 
     # Count generated PNG files
     png_count=$(ls -1 attachments/output/output-page-*.png 2>/dev/null | wc -l)
@@ -228,7 +222,7 @@ clean_build() {
     
     # Clean PNG files
     if directory_exists "attachments/output"; then
-        rm -f attachments/output/output-page-*.png attachments/output/output-combined.png
+        rm -f attachments/output/output-page-*.png
         print_success "PNG files cleaned"
     fi
     

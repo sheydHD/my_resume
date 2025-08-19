@@ -2,47 +2,44 @@ name: Build CV
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
     paths:
-      - 'template_2/**'
-      - 'modules/**'
+      - "template_2/**"
+      - "modules/**"
 
 jobs:
   build-cv:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup TeX Live
-      uses: xu-cheng/latex-action@v3
-      with:
-        root_file: template_2/main.tex
-        latexmk_use_xelatex: true
-        work_in_root_file_dir: false
+      - name: Setup TeX Live
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: template_2/main.tex
+          latexmk_use_xelatex: true
+          work_in_root_file_dir: false
 
-    - name: Convert PDF to PNG
-      run: |
-        # Install ImageMagick
-        sudo apt-get update
-        sudo apt-get install -y imagemagick
-        
-        # Create output directory
-        mkdir -p attachments/output
-        
-        # Convert PDF pages to PNG
-        convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png
-        
-        # Create combined version
-        convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png
-        
-        # List generated files
-        ls -la attachments/output/
+      - name: Convert PDF to PNG
+        run: |
+          # Install ImageMagick
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
 
-    - name: Commit generated images
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add attachments/output/
-        git diff --quiet && git diff --staged --quiet || (git commit -m "feat: auto-generate CV PNG images [skip ci]" && git push)
+          # Create output directory
+          mkdir -p attachments/output
+
+          # Convert PDF pages to PNG
+          convert template_2/out/main.pdf -background white -alpha remove -alpha off -quality 100 -density 1800 attachments/output/output-page-%d.png
+
+          # List generated files
+          ls -la attachments/output/
+
+      - name: Commit generated images
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add attachments/output/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "feat: auto-generate CV PNG images [skip ci]" && git push)
