@@ -7,16 +7,18 @@ This directory contains scripts for automatically generating and updating the ma
 ### 1. **GitHub Actions Workflow** (`.github/workflows/update-readme.yml`)
 - **Triggers**: Automatically runs when PNG files in `attachments/output/` or PDFs are pushed to the `master` branch
 - **Actions**: 
+  - **Completely removes** existing README.md
   - Sets up Python environment
-  - Runs the README generation script
+  - Runs the README generation script to create a **completely fresh** README
   - Commits and pushes changes back to the repository
 
 ### 2. **Main Script** (`generate_readme.py`)
-- **Purpose**: Dynamically generates README.md content based on PNG files in `attachments/output/`
+- **Purpose**: Generates a **completely clean and minimal** README with only CV pages
 - **Features**:
+  - **Always starts fresh** - no existing content is preserved
   - Automatically detects PNG files in `attachments/output/`
   - Generates appropriate descriptions for each CV page
-  - Creates a clean, simple README with just the CV pages
+  - Creates a **naked, minimal** README with just the CV pages
   - Sorts pages in correct numerical order
 
 ### 3. **Test Script** (`test_readme_generation.py`)
@@ -65,15 +67,17 @@ scripts/
 2. **You compile** the PDF and generate PNG previews in `attachments/output/`
 3. **You push** the changes to GitHub
 4. **GitHub Actions** automatically detects the PNG/PDF changes
-5. **The script runs** and generates a new README.md with just the CV pages
-6. **Changes are committed** and pushed back to your repository
-7. **Your README is always up-to-date** with the latest CV content
+5. **Existing README is completely removed** for fresh start
+6. **The script runs** and generates a **completely new** README.md
+7. **Changes are committed** and pushed back to your repository
+8. **Your README is always 100% fresh** with the latest CV content
 
 ## 🎯 Benefits
 
-- **Always Current**: README automatically reflects your latest CV
+- **Always Fresh**: README is completely regenerated every time
 - **No Manual Updates**: Set it and forget it
-- **Clean & Simple**: Only shows CV pages, nothing else
+- **Completely Clean**: Only shows CV pages, absolutely nothing else
+- **100% Dynamic**: No static content ever preserved
 - **Time Saving**: No need to manually update documentation
 - **Error Prevention**: Automated process reduces human error
 

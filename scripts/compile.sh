@@ -150,6 +150,12 @@ convert_to_png() {
 generate_readme() {
     print_status "Generating README.md..."
     
+    # Remove existing README to ensure complete regeneration
+    if [ -f "README.md" ]; then
+        print_status "Removing existing README.md for complete regeneration"
+        rm -f README.md
+    fi
+    
     if python3 scripts/generate_readme.py; then
         print_success "README.md generated successfully"
     else

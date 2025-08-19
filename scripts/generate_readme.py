@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Dynamic README generator for CV repository.
-Automatically generates README.md based on PNG files in attachments/output/.
+Generates a completely clean README with only CV pages.
 """
 
 import os
@@ -48,9 +48,9 @@ def generate_page_description(filename):
     return "CV Content"
 
 def generate_readme_content():
-    """Generate the complete README content."""
+    """Generate the completely minimal README content."""
     
-    # Header
+    # Start with completely clean content
     content = """# Antoni Dudij - CV/Resume
 
 <div align="center">
@@ -72,7 +72,7 @@ def generate_readme_content():
         content += f"![{description}]({relative_path})\n"
         content += f"*{description}*\n\n"
     
-    # Footer
+    # Close the div
     content += """</div>
 """
     
@@ -80,12 +80,12 @@ def generate_readme_content():
 
 def main():
     """Main function to generate and write README."""
-    print("🔄 Generating README.md...")
+    print("🔄 Generating clean README.md...")
     
     # Generate content
     content = generate_readme_content()
     
-    # Write to README.md
+    # Write to README.md (this completely overwrites any existing content)
     with open("README.md", "w", encoding="utf-8") as f:
         f.write(content)
     

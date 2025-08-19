@@ -23,6 +23,12 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Clean existing README
+      run: |
+        # Remove existing README to ensure complete regeneration
+        rm -f README.md
+        echo "🧹 Existing README removed for complete regeneration"
+
     - name: Generate README
       run: |
         python scripts/generate_readme.py
@@ -32,4 +38,4 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add README.md
-        git diff --quiet && git diff --staged --quiet || (git commit -m "docs(readme): auto-update README with latest CV images [skip ci]" && git push)
+        git diff --quiet && git diff --staged --quiet || (git commit -m "docs(readme): auto-regenerate README with latest CV images [skip ci]" && git push)
