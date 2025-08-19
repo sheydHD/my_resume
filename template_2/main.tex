@@ -5,8 +5,8 @@
     ignoreheadfoot, % set margins without considering header and footer
     top=1 cm, % seperation between body and page edge from the top
     bottom=2 cm, % seperation between body and page edge from the bottom
-    left=1.7 cm, % seperation between body and page edge from the left
-    right=1.7 cm, % seperation between body and page edge from the right
+    left=1.9 cm, % seperation between body and page edge from the left
+    right=1.9 cm, % seperation between body and page edge from the right
     footskip=0.5 cm, % seperation between body and footer
     % showframe % for debugging 
 ]{geometry} % for adjusting page geometry
@@ -35,7 +35,7 @@
 \usepackage{needspace} % for avoiding page brake right after the section title
 \usepackage{iftex} % check if engine is pdflatex, xetex or luatex
 \usepackage{fontspec} % For Times New Roman
-\linespread{1.2} % Increase line spacing
+\linespread{1.15} % Increase line spacing
 
 % Ensure that generate pdf is machine readable/ATS parsable:
 \ifPDFTeX
@@ -68,7 +68,7 @@
     0pt
 }{
     % top space:
-    0.4 cm
+    0.3 cm
 }{
     % bottom space:
     .15 cm
@@ -162,13 +162,17 @@
         \mbox{{\color{black}\footnotesize\faMapMarker*}\hspace*{0.13cm}Aachen, 52064 NRW} \kern 0.25 cm \textbullet \kern 0.25 cm
         \mbox{\hrefWithoutArrow{tel:+48-537-038-462}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}+48 537 038 462}} \kern 0.25 cm \textbullet \kern 0.25 cm
         \mbox{\hrefWithoutArrow{mailto:antoni.dudij@rwth-aachen.de}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}antoni.dudij@rwth-aachen.de}}
+
+        \vspace{0.3cm}
+        
+        \mbox{\hrefWithoutArrow{https://github.com/sheydHD}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}github.com/sheydHD}} \kern 0.25 cm \textbullet \kern 0.25 cm
+        \mbox{\hrefWithoutArrow{https://www.linkedin.com/in/antoni-dudij}{\color{black}{\footnotesize\faLinkedin}\hspace*{0.13cm}linkedin.com/in/antoni-dudij}}
     \end{header}
 
     \vspace{0.25 cm}
 
 
     \input{../modules/Summary.tex}
-    \input{../modules/portfolio.tex}
     \input{../modules/skills.tex}
     \input{../modules/work.tex}
     \input{../modules/languages.tex}
