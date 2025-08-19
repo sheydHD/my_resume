@@ -38,10 +38,10 @@ jobs:
       - name: Convert PDF to separate PNG files
         run: |
           # Convert each page to a separate PNG with white background
-          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/png/output-page-%d.png
+          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 attachments/output/output-page-%d.png
 
           # Also create a combined version for reference
-          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/png/output-combined.png
+          convert template_2/main.pdf -background white -alpha remove -alpha off -quality 90 -density 300 -append attachments/output/output-combined.png
 
       - name: Set up authentication
         run: |
@@ -51,7 +51,7 @@ jobs:
 
       - name: Commit and push generated images
         run: |
-          git add attachments/png/output-page-*.png
-          git add attachments/png/output-combined.png
+          git add attachments/output/output-page-*.png
+          git add attachments/output/output-combined.png
           git commit -m "Auto-update CV images [skip ci]" || exit 0
           git push
