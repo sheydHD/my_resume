@@ -1,0 +1,6 @@
+# No external dependencies required for this script
+# Uses only Python standard library modules:
+# - os
+# - glob  
+# - re
+# - pathlib
