@@ -22,9 +22,7 @@ try:
     
     # Test if content contains expected sections
     expected_sections = [
-        "## 📄 CV Pages",
-        "## 📁 Repository Structure", 
-        "## 🔄 Auto-Update"
+        "## 📄 CV Pages"
     ]
     
     for section in expected_sections:

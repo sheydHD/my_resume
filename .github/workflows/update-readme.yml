@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'attachments/png/*.png'
+      - 'attachments/output/*.png'
       - 'template_2/out/*.pdf'
 
 jobs:
