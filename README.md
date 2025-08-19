@@ -1,6 +1,6 @@
 <div align="center">
 
-![CV Page 1](attachments/png/output-page-0.png)
+![CV Page 1](attachments/png/output-page-0.png}
 
 ![CV Page 2](attachments/png/output-page-1.png)
 
